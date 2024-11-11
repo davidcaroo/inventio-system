@@ -161,7 +161,7 @@
 										body: function(data, row, column, node) {
 											// Agregar información adicional al CSV
 											if (column === 0) {
-												return 'Atendido por: Administrador Inventio\n\n';
+												
 											}
 											return data;
 										}
@@ -179,7 +179,7 @@
 										body: function(data, row, column, node) {
 											// Agregar información adicional al Excel
 											if (column === 0) {
-												return 'Atendido por: Administrador Inventio\n\n';
+												
 											}
 											return data;
 										}
@@ -213,7 +213,7 @@
 										body: function(data, row, column, node) {
 											// Agregar información adicional al print
 											if (column === 0) {
-												return 'Atendido por: Administrador Inventio\n\n';
+												
 											}
 											return data;
 										}

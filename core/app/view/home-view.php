@@ -110,7 +110,7 @@ foreach ($products as $product) {
 							<th>Codigo</th>
 							<th>Nombre del producto</th>
 							<th>En Stock</th>
-							<th>Recomendación</th>
+							<th>Observaciones</th>
 						</thead>
 						<?php foreach ($products as $product): ?>
 							<?php $q = OperationData::getQYesF($product->id); ?>

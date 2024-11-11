@@ -6,7 +6,10 @@ class SellData
 	public function __construct()
 	{
 		$this->created_at = null;
-		$this->note = ""; // Inicializa note como una cadena vacía
+        $this->note = ""; // Inicializa note como una cadena vacía
+        $this->total = 0; // Inicializa total en 0 
+        $this->discount = 0; // Inicializa discount en 0 
+        $this->user_id = null; // Inicializa user_id como null
 	}
 
 	public function getPerson()
@@ -99,6 +102,22 @@ class SellData
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
+
+		// Método para agregar un reabastecimiento sin cliente
+		public function add_re()
+		{
+			$sql = "INSERT INTO " . self::$tablename . " (total, discount, user_id, note, operation_type_id, created_at) ";
+			$sql .= "VALUES ($this->total, $this->discount, $this->user_id, '$this->note', 1, NOW())";
+			return Executor::doit($sql);
+		}
 	
+		// Método para agregar un reabastecimiento con cliente
+		public function add_re_with_client()
+		{
+			$sql = "INSERT INTO " . self::$tablename . " (total, discount, person_id, user_id, note, operation_type_id, created_at) ";
+			$sql .= "VALUES ($this->total, $this->discount, $this->person_id, $this->user_id, '$this->note', 1, NOW())";
+			return Executor::doit($sql);
+		}
+
 }
 

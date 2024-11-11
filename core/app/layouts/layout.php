@@ -259,8 +259,8 @@
         </div>
       </div>
       <footer class="footer">
-        <div><a href="https://github.com/caromoralesdavid" target="blank">David Caro </a> © 2024.</div>
-        <div class="ms-auto">Version <b>4.1</b></div>
+        <div><a href="https://github.com/caromoralesdavid" target="blank">David Caro</a> © 2024.</div>
+        <div class="ms-auto">Version <b>4.3</b></div>
       </footer>
     </div>
   <?php endif; ?>

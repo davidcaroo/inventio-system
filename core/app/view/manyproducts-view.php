@@ -11,28 +11,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (pathinfo($fileName, PATHINFO_EXTENSION) === 'csv') {
             // Abre el archivo CSV
             if (($handle = fopen($fileTmpPath, 'r')) !== FALSE) {
-                // Conectar a la base de datos (ajusta los valores según tu configuración)
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
                 $dbname = "inventiolite";
-
-                // Crear conexión
+               
                 $conn = new mysqli($servername, $username, $password, $dbname);
-
-                // Verificar conexión
+               
                 if ($conn->connect_error) {
                     die("Conexión fallida: " . $conn->connect_error);
                 }
 
                 // Leer el archivo línea por línea
-                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) { // Cambiado a punto y coma
+                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
                     // Verificar que la línea tenga el número correcto de columnas
-                    if (count($data) < 12) {
-                        echo "Línea ignorada: " . implode(", ", $data) . " (menos de 12 columnas)<br>";
+                    if (count($data) < 14) {
+                        echo "Línea ignorada: " . implode(", ", $data) . " (menos de 14 columnas)<br>";
                         continue; // Ignorar esta línea y continuar con la siguiente
                     }
-                    // barcode, name, description, inventary_min, price_in, price_out, unit, presentation, user_id, category_id, created_at, is_active
+                    
+                    // Asignar valores del CSV a variables
                     $barcode = $data[0];
                     $name = $data[1];
                     $description = $data[2];
@@ -45,25 +43,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $category_id = $data[9];
                     $created_at = $data[10];
                     $is_active = $data[11];
+                    $q = $data[12];
+                    $operation_type_id = $data[13];
 
-                    // Preparar la consulta SQL
-                    $stmt = $conn->prepare("INSERT INTO product (barcode, name, description, inventary_min, price_in, price_out, unit, presentation, user_id, category_id, created_at, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                    if ($stmt) {
-                        $stmt->bind_param("sssddsssissi", $barcode, $name, $description, $inventary_min, $price_in, $price_out, $unit, $presentation, $user_id, $category_id, $created_at, $is_active);
+                    // Verificar si el category_id existe en la tabla category
+                    $check_category_stmt = $conn->prepare("SELECT 1 FROM category WHERE id = ?");
+                    $check_category_stmt->bind_param("i", $category_id);
+                    $check_category_stmt->execute();
+                    $result = $check_category_stmt->get_result();
 
-                        // Ejecutar la consulta
-                        if (!$stmt->execute()) {
-                            echo "Error al insertar producto: " . $stmt->error . "<br>";
+                    if ($result->num_rows > 0) {
+                        // Preparar la consulta para insertar en la tabla product
+                        $stmt = $conn->prepare("INSERT INTO product (barcode, name, description, inventary_min, price_in, price_out, unit, presentation, user_id, category_id, created_at, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        if ($stmt) {
+                            $stmt->bind_param("sssddsssissi", $barcode, $name, $description, $inventary_min, $price_in, $price_out, $unit, $presentation, $user_id, $category_id, $created_at, $is_active);
+                            if ($stmt->execute()) {
+                                // Obtener el último ID insertado de la tabla product para usarlo en la tabla operation
+                                $product_id = $conn->insert_id;
+
+                                // Preparar la consulta para insertar en la tabla operation
+                                $stmt_op = $conn->prepare("INSERT INTO operation (product_id, q, operation_type_id, created_at) VALUES (?, ?, ?, ?)");
+                                if ($stmt_op) {
+                                    $stmt_op->bind_param("iiis", $product_id, $q, $operation_type_id, $created_at);
+                                    if (!$stmt_op->execute()) {
+                                        echo "Error al insertar operación: " . $stmt_op->error . "<br>";
+                                    }
+                                    $stmt_op->close();
+                                } else {
+                                    echo "Error al preparar la consulta de operación: " . $conn->error . "<br>";
+                                }
+                            } else {
+                                echo "Error al insertar producto: " . $stmt->error . "<br>";
+                            }
+                            $stmt->close();
+                        } else {
+                            echo "Error al preparar la consulta de producto: " . $conn->error . "<br>";
                         }
                     } else {
-                        echo "Error al preparar la consulta: " . $conn->error . "<br>";
+                        //echo "Error: `category_id` $category_id no existe en la tabla `category`. <br>";
                     }
+
+                    $check_category_stmt->close();
                 }
+
                 // Cerrar el archivo y la conexión
                 fclose($handle);
-                if (isset($stmt)) {
-                    $stmt->close();
-                }
                 $conn->close();
 
                 echo "Productos importados exitosamente.";
