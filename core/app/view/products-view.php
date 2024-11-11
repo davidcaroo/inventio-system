@@ -18,9 +18,9 @@
 	<div class="col-md-12">
 		<h1>Productos</h1>
 		<div class="">
-			<a href="index.php?view=newproduct" class="btn btn-success">Agregar Producto</a>
+			<a href="index.php?view=newproduct" class="btn btn-success"><i class="bi bi-plus-circle"></i>Agregar Producto</a>
 			<div class="btn-group pull-right">
-				 <a href="index.php?view=importproducts" class="btn btn-primary">Importar Productos</a> 
+				 <a href="index.php?view=importproducts" class="btn btn-primary"><i class="bi bi-folder-plus"></i> Importar Productos</a> 
 			</div>
 		</div>
 		

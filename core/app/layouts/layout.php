@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 
 <!-- Breadcrumb-->
-<html lang="en">
+<html lang="es">
 
 <head>
   <base href="./">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-  <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
-  <meta name="author" content="Łukasz Holeczek">
+  <meta name="description" content="Inventio - System ">
+  <meta name="author" content="Modif. David Caro">
   <meta name="keyword" content="Bootstrap,Admin,Template,Open,Source,jQuery,CSS,HTML,RWD,Dashboard">
   <title>DISTRICOLOMBIA SHOP</title>
   <link rel="apple-touch-icon" sizes="57x57" href="assets/favicon/apple-icon-57x57.png">
@@ -104,7 +104,7 @@
 
         </div>
         <div class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
-          <h4><a href="./" style="color: white;">I<b>L</b></a></h4>
+          <h4><a href="./" style="color: white;">D<b>C</b></a></h4>
 
         </div>
       </div>
@@ -203,7 +203,7 @@
             </svg>
           </button><a class="header-brand d-md-none" href="#">
             <svg width="118" height="46" alt="CoreUI Logo">
-              <use xlink:href="assets/brand/coreui.svg#full"></use>
+              <use xlink:href="assets/img/DISTRI-LOGO-2.jpg"></use>
             </svg></a>
           <!--
           <ul class="header-nav d-none d-md-flex">
@@ -222,7 +222,7 @@
           </ul>
           <ul class="header-nav ms-3">
             <li class="nav-item dropdown"><a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/user.png" alt="user@email.com"></div>
+                <div class="avatar avatar-md"><img class="avatar-img" src="assets/img/DISTRI-LOGO-2.jpg" alt="Districolombia"></div>
               </a>
               <div class="dropdown-menu dropdown-menu-end pt-0">
                 <div class="dropdown-header bg-light py-2">
