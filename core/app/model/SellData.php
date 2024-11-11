@@ -65,6 +65,14 @@ class SellData
 		return Model::one($query[0], new SellData());
 	}
 
+	/* method SellData::getByPersonId()*/
+	public static function getByPersonId($id)
+	{
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE person_id = $id";
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
+	}
+
 	/* agregar el metodo getSellsUnBoxed() */
 	public static function getSellsUnBoxed()
 	{
@@ -119,5 +127,12 @@ class SellData
 			return Executor::doit($sql);
 		}
 
+		/* method SellData::getRes()  */
+		public static function getRes()
+		{
+			$sql = "SELECT * FROM " . self::$tablename . " WHERE operation_type_id = 1 ORDER BY created_at DESC";
+			$query = Executor::doit($sql);
+			return Model::many($query[0], new SellData());
+		}
 }
 
