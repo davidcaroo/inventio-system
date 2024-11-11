@@ -18,11 +18,12 @@
 	<div class="col-md-12">
 		<h1>Productos</h1>
 		<div class="">
-			<a href="index.php?view=newproduct" class="btn btn-secondary">Agregar Producto</a>
+			<a href="index.php?view=newproduct" class="btn btn-success">Agregar Producto</a>
 			<div class="btn-group pull-right">
-				<!-- <a href="index.php?view=importproducts" class="btn btn-secondary">Importar Productos</a> -->
+				 <a href="index.php?view=importproducts" class="btn btn-primary">Importar Productos</a> 
 			</div>
 		</div>
+		
 		<br>
 
 		<div class="card">
@@ -59,7 +60,7 @@
 				?>
 
 					<h3>Pagina <?php echo $page . " de " . $npaginas; ?></h3>
-					<div class="btn-group pull-right">
+				<!-- 	<div class="btn-group pull-right">
 						<?php
 						$px = $page - 1;
 						if ($px > 0):
@@ -73,7 +74,7 @@
 						?>
 							<a class="btn btn-sm btn-secondary" href="<?php echo "index.php?view=products&limit=$limit&page=" . ($px); ?>">Adelante <i class="glyphicon glyphicon-chevron-right"></i></a>
 						<?php endif; ?>
-					</div>
+					</div> -->
 					<div class="clearfix"></div>
 					<br>
 					<table id="productsTable" class="table table-bordered table-hover">

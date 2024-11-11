@@ -2,126 +2,100 @@
 class SellData
 {
 	public static $tablename = "sell";
-
-	// Constructor sin "NOW()" directo
-	public function SellData()
+	
+	public function __construct()
 	{
-		$this->created_at = null; // Inicialmente nulo, se establecerá en la consulta SQL
+		$this->created_at = null;
+		$this->note = ""; // Inicializa note como una cadena vacía
 	}
 
 	public function getPerson()
 	{
 		return PersonData::getById($this->person_id);
 	}
+
 	public function getUser()
 	{
 		return UserData::getById($this->user_id);
 	}
 
+	// Método para agregar una venta con el campo note
 	public function add()
 	{
-		$sql = "insert into " . self::$tablename . " (total, discount, user_id, created_at) ";
-		$sql .= "values ($this->total, $this->discount, $this->user_id, NOW())"; // Aquí usamos NOW() directamente en la consulta SQL
+		$sql = "INSERT INTO " . self::$tablename . " (total, discount, user_id, note, created_at) ";
+		$sql .= "VALUES ($this->total, $this->discount, $this->user_id, '$this->note', NOW())";
 		return Executor::doit($sql);
 	}
 
-	public function add_re()
-	{
-		$sql = "insert into " . self::$tablename . " (user_id, operation_type_id, created_at) ";
-		$sql .= "values ($this->user_id, 1, NOW())"; // También aquí
-		return Executor::doit($sql);
-	}
-
+	// Método para agregar una venta con cliente y el campo note
 	public function add_with_client()
 	{
-		$sql = "insert into " . self::$tablename . " (total, discount, person_id, user_id, created_at) ";
-		$sql .= "values ($this->total, $this->discount, $this->person_id, $this->user_id, NOW())";
+		$sql = "INSERT INTO " . self::$tablename . " (total, discount, person_id, user_id, note, created_at) ";
+		$sql .= "VALUES ($this->total, $this->discount, $this->person_id, $this->user_id, '$this->note', NOW())";
 		return Executor::doit($sql);
 	}
-
-	public function add_re_with_client()
+	public static function getSells()
 	{
-		$sql = "insert into " . self::$tablename . " (person_id, operation_type_id, user_id, created_at) ";
-		$sql .= "values ($this->person_id, 1, $this->user_id, NOW())";
-		return Executor::doit($sql);
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE operation_type_id = 2 ORDER BY created_at DESC";
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
 	}
-
+	
 	public static function delById($id)
 	{
-		$sql = "delete from " . self::$tablename . " where id=$id";
+		$sql = "DELETE FROM " . self::$tablename . " WHERE id = $id";
 		Executor::doit($sql);
 	}
 
 	public function del()
 	{
-		$sql = "delete from " . self::$tablename . " where id=$this->id";
+		$sql = "DELETE FROM " . self::$tablename . " WHERE id = $this->id";
 		Executor::doit($sql);
 	}
 
+	// Otros métodos...
+
+	public static function getById($id)
+	{
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE id = $id";
+		$query = Executor::doit($sql);
+		return Model::one($query[0], new SellData());
+	}
+
+	/* agregar el metodo getSellsUnBoxed() */
+	public static function getSellsUnBoxed()
+	{
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE operation_type_id = 2 AND box_id IS NULL ORDER BY created_at DESC";
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
+	}
+
+	/* agregar el metodo getByBoxId() */
+	public static function getByBoxId($id)
+	{
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE box_id = $id";
+		$query = Executor::doit($sql);
+		return Model::many($query[0], new SellData());
+	}
+
+	/* agregar method SellData::update_box()  */
 	public function update_box()
 	{
 		$sql = "update " . self::$tablename . " set box_id=$this->box_id where id=$this->id";
 		Executor::doit($sql);
 	}
-
-	public static function getById($id)
-	{
-		$sql = "select * from " . self::$tablename . " where id=$id";
-		$query = Executor::doit($sql);
-		return Model::one($query[0], new SellData());
-	}
-
-	public static function getSells()
-	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=2 order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0], new SellData());
-	}
-
-	public static function getSellsUnBoxed()
-	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=2 and box_id is NULL order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0], new SellData());
-	}
-
-	public static function getByBoxId($id)
-	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=2 and box_id=$id order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0], new SellData());
-	}
-
-	public static function getRes()
-	{
-		$sql = "select * from " . self::$tablename . " where operation_type_id=1 order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0], new SellData());
-	}
-
-	public static function getAllByPage($start_from, $limit)
-	{
-		$sql = "select * from " . self::$tablename . " where id<=$start_from limit $limit";
-		$query = Executor::doit($sql);
-		return Model::many($query[0], new SellData());
-	}
-
+	/* agregar el metodo SellData::getAllByDateOp() */
 	public static function getAllByDateOp($start, $end, $op)
 	{
-		$sql = "select * from " . self::$tablename . " where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and operation_type_id=$op order by created_at desc";
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE created_at >= \"$start\" AND created_at <= \"$end\" AND operation_type_id = $op";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}
-
-	public static function getAllByDateBCOp($person_id, $start, $end, $op)
+	
+	/* agregar el metodo SellData::getAllByDateBCOp() */
+	public static function getAllByDateBCOp($client_id, $start, $end, $op)
 	{
-		$sql = "select * from " . self::$tablename . " where date(created_at) >= \"$start\" and date(created_at) <= \"$end\" and person_id=$person_id  and operation_type_id=$op order by created_at desc";
-		$query = Executor::doit($sql);
-		return Model::many($query[0], new SellData());
-	}
-
-	public static function getByPersonId($person_id) {
-		$sql = "SELECT * FROM sell WHERE person_id = $person_id";
+		$sql = "SELECT * FROM " . self::$tablename . " WHERE person_id = $client_id AND created_at >= \"$start\" AND created_at <= \"$end\" AND operation_type_id = $op";
 		$query = Executor::doit($sql);
 		return Model::many($query[0], new SellData());
 	}

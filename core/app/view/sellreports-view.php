@@ -93,6 +93,7 @@ $clients = PersonData::getClients();
 									<thead>
 										<!-- 	<th>Id</th> -->
 										<th>Subtotal</th>
+										<th>Cliente</th>
 										<th>Dto Revendedor</th>
 										<th>Total</th>
 										<th>Fecha y hora de venta</th>
@@ -102,12 +103,19 @@ $clients = PersonData::getClients();
 										<tr>
 											<!-- <td><?php echo $operation->id; ?></td> -->
 											<td>$ <?php echo number_format($operation->total, 2, '.', ','); ?></td>
+											<!-- Mostrar el cliente -->
+											<td><?php if ($operation->person_id != null) {
+													echo $operation->getPerson()->name;
+												} else {
+													echo "No registrado";
+												} ?></td>
 											<!-- Quuiero que hagas una opcion de que sí el descuento es 0, salga la palabra no aplica -->
 											<td><?php if ($operation->discount == 0) {
 													echo "No aplica";
 												} else {
 													echo "$ " . number_format($operation->discount, 2, '.', ',');
 												} ?></td>
+											
 											<td>$ <?php echo number_format($operation->total - $operation->discount, 2, '.', ','); ?></td>
 											<td><?php echo $operation->created_at; ?></td>
 

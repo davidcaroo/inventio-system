@@ -25,6 +25,7 @@
 								<th>Total</th>
 								<th>Fecha</th>
 								<th>Cliente</th>
+								<th>Tipo venta</th>
 								<th>Opciones</th>
 							</tr>
 						</thead>
@@ -36,33 +37,44 @@
 											<i class="bi bi-eye"></i>
 										</a>
 									</td>
-									<td>
+									<td style="width:30px;">
 										<?php
 										$operations = OperationData::getAllProductsBySellId($sell->id);
 										echo count($operations);
 										?>
-									</td>
-									<td>
+										</>
+									<td style="width:40px;">
 										<?php
 										foreach ($operations as $operation) {
 											$product = $operation->getProduct();
 											echo $product->name . "<br>";
 										}
 										?>
-									<td>
+									<td style="width:100px;">
 										<?php
 										$total = $sell->total - $sell->discount;
 										echo "<b>$ " . number_format($total) . "</b>";
 										?>
 									</td>
-									<td><?php echo $sell->created_at; ?></td>
-									<td>
+									<td style="width:130px;"><?php echo $sell->created_at; ?></td>
+									<td style="width:150px;">
 										<?php
 										if ($sell->person_id != '') {
 											$client = $sell->getPerson();
 											echo $client->name . " " . $client->lastname;
-										}
+										} else {
+											echo "<i>Cliente no registrado</i>";
+										}	
 										?>
+									</td>
+									<td style="width:70px;">
+										<?php if ($sell->note == ""): ?>
+											<p>De contado</p>
+										<?php elseif (strtolower($sell->note) == "credito"): ?>
+											<p>A crédito</h>
+										<?php else: ?>
+											<p><?php echo htmlspecialchars($sell->note); ?></p>
+										<?php endif; ?>
 									</td>
 									<td style="width:30px;">
 										<a href="index.php?view=delsell&id=<?php echo $sell->id; ?>" class="btn btn-xs btn-danger">

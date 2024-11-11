@@ -2,7 +2,7 @@
 	<div class="col-md-12">
 		<h1>Categorias</h1>
 		<div class="">
-			<a href="index.php?view=newcategory" class="btn btn-secondary"><i class='fa fa-th-list'></i> Nueva Categoria</a>
+			<a href="index.php?view=newcategory" class="btn btn-success"><i class='fa fa-th-list'></i> Nueva Categoria</a>
 		</div>
 		<br>
 		<div class="card">
