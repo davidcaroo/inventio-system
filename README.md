@@ -1,5 +1,5 @@
 # Inventario
-Sistema de control de inventarios en php con bootstrap y datatables, para el manejo de las tablas.
+Sistema de control de inventarios en php con bootstrap, core UI y datatables, para el manejo de las tablas.
 Este sistema permite tener un control de entrada de productos, salidas, registro de clientes, consulta de movimientos por fecha, por cliente.
 En datatables se añadió el buscador y filtrado de datos para facilitar la navegación del cliente y la experiencia de ususario.
 
